@@ -146,15 +146,19 @@ public class CucumberSteps extends CucumberConfiguration {
         verify(mockedRepository,times(1)).save(any(User.class));
     }
 
+    @Entonces("no se ha persistido el usuario en la base de datos")
+    public void checkUserWasNotSaved(){
+        verify(mockedRepository,times(0)).save(any(User.class));
+    }
+
     @Entonces("se ha persistido el sorteo en la base de datos")
     public void checkDrawWasSaved(){
         verify(mockedRepository2,times(1)).save(any(Draw.class));
     }
 
-    @Entonces("no se ha persistido el usuario en la base de datos")
-    public void checkUserWasNotSaved(){
-        verify(mockedRepository,times(0)).save(any(User.class));
-    }
+    @Entonces("no se ha persistido el sorteo en la base de datos")
+    public void checkDrawNotWasSaved(){
+        verify(mockedRepository2,times(0)).save(any(Draw.class));
 
     @Entonces("se muestra un campo de {}")
     public void fieldIsDisplayed(String fieldName){

@@ -16,3 +16,9 @@ Característica: Gestion de sorteos
     Cuando relleno el campo descripcion con sorteo
     Y el usuario hace click sobre el botón de crear sorteo
     Entonces se ha persistido el sorteo en la base de datos
+
+   Escenario: Intento de crear un sorteo sin descripcion
+   Dado un usuario esta en la pagina creación de sorteos
+   Cuando no relleno el campo descripcion con sorteo
+   Y el usuario hace click sobre el botón de crear sorteo
+   Entonces no se ha persistido el sorteo en la base de datos
