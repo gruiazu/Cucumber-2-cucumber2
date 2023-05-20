@@ -4,4 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface DrawRepository extends CrudRepository<Draw,Long>{
     
+    public Draw findByDescription(String description);
+
 }
+    
+

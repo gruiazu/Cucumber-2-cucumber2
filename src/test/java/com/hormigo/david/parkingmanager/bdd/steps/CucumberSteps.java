@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.hormigo.david.parkingmanager.bdd.CucumberConfiguration;
+import com.hormigo.david.parkingmanager.draw.domain.Draw;
 import com.hormigo.david.parkingmanager.user.domain.User;
 import com.hormigo.david.parkingmanager.user.domain.UserRepository;
 import com.hormigo.david.parkingmanager.user.service.UserService;
@@ -54,6 +55,11 @@ public class CucumberSteps extends CucumberConfiguration {
     @InjectMocks
     private UserServiceImpl mockedUserService;
 
+    @MockBean
+    private DrawRepository mockedRepository2;
+    @InjectMocks
+    private DrawServiceImpl mockedDrawService;
+
     @Value("${local.server.port}")
     private int port;
 
@@ -77,16 +83,28 @@ public class CucumberSteps extends CucumberConfiguration {
 
     }
 
-    @Dado("el correo {} no esta asignado a otro usuario")
-    public void mockUserNotExists(String email){
+    @Dado("el correo {} {} esta asignado a otro usuario")
+    public void mockUserNotOrYesExists(String email, String resultado){
+        switch (resultado) {
+            case "no":
         when(mockedRepository.findByEmail(email)).thenReturn(null);
         //when(mockedUserService.userExists(email)).thenReturn(false);
-        
+        break;
+            case "si":
+            when(mockedUserService.userExists(email)).thenReturn(true);
+        break;
+        }
     }
     @Cuando("relleno el campo {} con {}")
     public void populateField(String fieldName,String fieldValue){
         WebElement inputField = driver.findElement(By.id(getFieldIdFromName(fieldName)));
         inputField.sendKeys(fieldValue);
+    }
+
+    @Cuando("no relleno el campo {} con {}")
+    public void UnfilledField(String fieldName,String fieldValue){
+        WebElement inputField = driver.findElement(By.id(getFieldIdFromName(fieldName)));
+        inputField.clear();
     }
 
     @Cuando("el usuario hace click sobre el botón de {}")
@@ -101,6 +119,15 @@ public class CucumberSteps extends CucumberConfiguration {
                 break;
             case "crear usuario":
                 buttonId = "user-create-button-submit";
+                break;
+            case "crear sorteo":
+                buttonId = "draw-button-submit";
+                break;
+            case "formulario usuarios":
+                buttonId = "users-button-create";
+                break;
+            case "formulario sorteos":
+                buttonId = "create-draw";
                 break;
             default:
                 break;
@@ -117,6 +144,16 @@ public class CucumberSteps extends CucumberConfiguration {
     @Entonces("se ha persistido el usuario en la base de datos")
     public void checkUserWasSaved(){
         verify(mockedRepository,times(1)).save(any(User.class));
+    }
+
+    @Entonces("se ha persistido el sorteo en la base de datos")
+    public void checkDrawWasSaved(){
+        verify(mockedRepository2,times(1)).save(any(Draw.class));
+    }
+
+    @Entonces("no se ha persistido el usuario en la base de datos")
+    public void checkUserWasNotSaved(){
+        verify(mockedRepository,times(0)).save(any(User.class));
     }
 
     @Entonces("se muestra un campo de {}")
@@ -142,6 +179,8 @@ public class CucumberSteps extends CucumberConfiguration {
             case "creación de usuarios":
                 endPoint = "/newUser";
             break;
+            case "creación de sorteos":
+                endPoint = "/newDraw";
             default:
                 break;
         }
@@ -162,6 +201,9 @@ public class CucumberSteps extends CucumberConfiguration {
             break;
             case "segundo apellido":
             fieldId = "user-create-field-lastname2";
+            break;
+            case "descripcion":
+            fieldId = "draw-field-description";
             break;
             default:
                 break;
