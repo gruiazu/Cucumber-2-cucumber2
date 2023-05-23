@@ -28,6 +28,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.hormigo.david.parkingmanager.bdd.CucumberConfiguration;
 import com.hormigo.david.parkingmanager.draw.domain.Draw;
+import com.hormigo.david.parkingmanager.draw.domain.DrawRepository;
+import com.hormigo.david.parkingmanager.draw.service.DrawServiceImpl;
 import com.hormigo.david.parkingmanager.user.domain.User;
 import com.hormigo.david.parkingmanager.user.domain.UserRepository;
 import com.hormigo.david.parkingmanager.user.service.UserService;
@@ -92,7 +94,7 @@ public class CucumberSteps extends CucumberConfiguration {
         break;
             case "si":
             when(mockedUserService.userExists(email)).thenReturn(true);
-        break;
+            break;
         }
     }
     @Cuando("relleno el campo {} con {}")
