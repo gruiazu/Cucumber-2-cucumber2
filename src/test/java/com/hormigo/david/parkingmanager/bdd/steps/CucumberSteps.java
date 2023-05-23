@@ -161,6 +161,7 @@ public class CucumberSteps extends CucumberConfiguration {
     @Entonces("no se ha persistido el sorteo en la base de datos")
     public void checkDrawNotWasSaved(){
         verify(mockedRepository2,times(0)).save(any(Draw.class));
+    }
 
     @Entonces("se muestra un campo de {}")
     public void fieldIsDisplayed(String fieldName){
@@ -219,5 +220,5 @@ public class CucumberSteps extends CucumberConfiguration {
     private String getUrlFromEndPoint(String endpoint) {
         return "http://localhost:" + port + endpoint;
     }
-
+    
 }
