@@ -139,7 +139,6 @@ public class CucumberSteps extends CucumberConfiguration {
 
     @Entonces("esta en la pagina de {}")
     public void isInPage(String pageName) {
-
         assertTrue(driver.getCurrentUrl().equals(getUrlFromPageName(pageName)));
     }
 
@@ -169,6 +168,22 @@ public class CucumberSteps extends CucumberConfiguration {
         WebElement field = driver.findElement(By.id(fieldId));
         
         assertTrue(field.isDisplayed());
+    }
+
+    @Entonces("se muestra un botón de {}")
+    public void CreateButton(String ButtonName){
+        String buttonId="";
+        switch (ButtonName){
+            case "creación de usuario":
+            buttonId = "user-create-button-submit";
+            break;
+            case "creación de sorteo":
+            buttonId = "draw-button-submit";
+            break;
+        }
+
+        WebElement button = driver.findElement(By.id(buttonId));
+        assertTrue(button.isDisplayed());
     }
 
     private String getUrlFromPageName(String pageName) {
@@ -212,6 +227,8 @@ public class CucumberSteps extends CucumberConfiguration {
             case "descripcion":
             fieldId = "draw-field-description";
             break;
+            case "creación de usuario":
+            fieldId = "user-create-button-submit";
             default:
                 break;
         }
